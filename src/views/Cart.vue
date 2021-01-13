@@ -15,7 +15,7 @@ import {bus} from '../main';
 
 
 export default {
-name: "Chart",
+name: "Cart",
     data() {
       return {
         products: [
@@ -23,7 +23,7 @@ name: "Chart",
       }
     },
   created() {
-    bus.$on("chartStateChanged", products => {
+    bus.$on("cartStateChanged", products => {
       this.products = []
       for(let i=0; i< products.length; i++)
       {

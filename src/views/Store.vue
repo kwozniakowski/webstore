@@ -21,13 +21,14 @@ export default {
   data () {
     return {
       products: [
-        {id: '01',name: "Wędlina Krakowska",isInChart: false},
-        {id: '07',name: "Bułka poznańska",isInChart: false}
-        , {id: '02',name: "Krakowska podsuszana",isInChart: false}
-        , {id: '03',name: "Wędliny z meliny",isInChart: false}
-        , {id: '04',name: "Chlebek boży",isInChart: false}
-        , {id: '05',name: "Angielka",isInChart: false}
-        , {id: '06',name: "Szynka",isInChart: false}
+        {id: '01',name: "Wędlina Krakowska",isInCart: false},
+        {id: '07',name: "Bułka poznańska",isInCart: false}
+        , {id: '02',name: "Krakowska podsuszana",isInCart: false}
+        , {id: '03',name: "Wędliny z maliny",isInCart: false}
+        , {id: '04',name: "Chlebek boży",isInCart: false}
+        , {id: '05',name: "Angielka",isInCart: false}
+        , {id: '06',name: "Szynka",isInCart: false}
+        ,{id: '07',name: "Wędlinka",isInCart: false}
       ],
       chart: [],
     }
@@ -35,12 +36,12 @@ export default {
   components: {TopBar},
   methods: {
     addToChart: function (product) {
-      product.isInChart = true
+      product.isInCart = true
       for (let i = 0; i < this.products.length; i++)
       {
         console.log(product.name + product.isInChart)
       }
-      bus.$emit("chartStateChanged", this.products)
+      bus.$emit("cartStateChanged", this.products)
     }
   }
 }

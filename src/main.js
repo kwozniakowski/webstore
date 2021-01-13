@@ -9,7 +9,7 @@ import VueRouter from 'vue-router'
 import Home from "./views/Home.vue"
 import About from "./views/About.vue"
 import Store from "./views/Store"
-import Chart from "./views/Chart"
+import Chart from "./views/Cart"
 
 Vue.use(VueRouter)
 
