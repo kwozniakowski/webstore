@@ -8,7 +8,6 @@ class CartDataService {
     addItemToCart(jsonProductData) {
         return http.post("/cart", jsonProductData)
     }
-
 }
 
 export default new CartDataService();
