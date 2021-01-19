@@ -9,28 +9,33 @@ import VueRouter from 'vue-router'
 import Home from "./views/Home.vue"
 import About from "./views/About.vue"
 import Store from "./views/Store"
-import Chart from "./views/Cart"
+import Cart from "./views/Cart"
+import Login from "./views/Login"
 
 Vue.use(VueRouter)
 
 export const bus = new Vue()
 
 export const routes = [
-  {
-    path: "/",
-    component: Home
-  },
-  {
-    path: "/about",
-    component: About
-  },
-  {
-    path: "/products",
-    component: Store
-  },
     {
-        path: "/chart",
-        component: Chart
+      path: "/",
+      component: Home
+    },
+    {
+      path: "/about",
+      component: About
+    },
+    {
+      path: "/store",
+      component: Store
+    },
+    {
+        path: "/cart",
+        component: Cart
+    },
+    {
+        path: "/login",
+        component: Login
     }
 
 ]

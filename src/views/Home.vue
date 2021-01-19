@@ -1,7 +1,7 @@
 <template>
   <div>
     <TopBar></TopBar>
-    <img src="../assets/sbwitd.jpg" style="width: 100%">
+    <img src="../assets/swieze_bulki.jpg" style="width: 100%">
   </div>
 </template>
 
