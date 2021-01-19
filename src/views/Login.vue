@@ -10,7 +10,7 @@
               <input type="submit" value="Zaloguj się">
               <div id="formFooter">
                 <h>Nie masz konta? </h>
-                <a class="underlineHover" href="#">Zarejestruj się tutaj</a>
+                <router-link class="underlineHover" to="/register">Zarejestruj się tutaj</router-link>
               </div>
             </form>
           </div>

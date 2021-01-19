@@ -11,6 +11,7 @@ import About from "./views/About.vue"
 import Store from "./views/Store"
 import Cart from "./views/Cart"
 import Login from "./views/Login"
+import Register from "./views/Register";
 
 Vue.use(VueRouter)
 
@@ -36,6 +37,10 @@ export const routes = [
     {
         path: "/login",
         component: Login
+    },
+    {
+        path: "/register",
+        component: Register
     }
 
 ]
