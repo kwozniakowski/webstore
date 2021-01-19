@@ -3,10 +3,10 @@
   <TopBar>
   </TopBar>
   <div class="row col">
-    <div class="col-4" v-for='product in products' :key="product">
+    <div class="col-4" v-for='product in products' v-bind:key="'product'+product._id">
       <div class="mt-5 text-center product-view shadow">
         <i class="col-3">{{product.name}}</i>
-        <button class="btn btn-dark" @click="addToChart(product)">Dodaj do koszyka</button>
+        <button class="btn btn-dark" @click="addToCart(product)">Dodaj do koszyka</button>
       </div>
     </div>
   </div>
@@ -15,8 +15,9 @@
 
 <script>
 import TopBar from "../components/TopBar";
-import {bus} from "../main";
+//import {bus} from "../main";
 import ProductsDataService from "../services/ProductsDataService.js"
+import CartDataService from "@/services/CartDataService";
 export default {
   name: "Store",
   data () {
@@ -35,20 +36,21 @@ export default {
   },
   components: {TopBar},
   methods: {
-    addToChart: function (product) {
-      product.isInChart = true
-      for (let i = 0; i < this.products.length; i++)
-      {
-        console.log(product.name + product.isInChart)
+    addToCart: function (product) {
+      let jsonProductData = {
+        "name": product.name,
+        "quantity": 1,
+        "price": 3,
+        "description": product.description
       }
-      bus.$emit("chartStateChanged", this.products)
+      CartDataService.addItemToCart(jsonProductData)
     },
 
     getAllProducts: function() {
       ProductsDataService.getAll()
           .then(response => {
-            this.products = response.data;
-            console.log(response.data);
+            this.products = response.data.data;
+            //console.log(response.data);
           })
           .catch(e => {
             console.log(e);

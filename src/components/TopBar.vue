@@ -3,8 +3,8 @@
     <div class="container-fluid row">
       <router-link class="navbar-brand" to="/">Strona główna</router-link>
       <router-link class="navbar-brand" to="/about">O nas</router-link>
-      <router-link class="navbar-brand" to="/products">Nasze produkty</router-link>
-      <router-link class="navbar-brand" to="/chart">Twój koszyk</router-link>
+      <router-link class="navbar-brand" to="/store">Nasze produkty</router-link>
+      <router-link class="navbar-brand" to="/cart">Twój koszyk</router-link>
     </div>
   </nav>
 </template>
