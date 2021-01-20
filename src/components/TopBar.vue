@@ -5,7 +5,8 @@
       <router-link class="navbar-brand" to="/about">O nas</router-link>
       <router-link class="navbar-brand" to="/store">Nasze produkty</router-link>
       <router-link class="navbar-brand" to="/cart">Twój koszyk</router-link>
-      <router-link class="navbar-brand" to="/login">Login</router-link>
+      <router-link v-if="!isLogged" class="navbar-brand" to="/login">Login</router-link>
+      <a v-else class="navbar-brand" v-on:click="logout()" style="cursor: pointer">Logout</a>
     </div>
   </nav>
 </template>
@@ -24,9 +25,18 @@ export default {
           name: "Edit",
           menu: [{ name: "Cut"}, {name: "Copy"}, {name: "Paste"}]
         }
-      ]
+      ],
+      isLogged : localStorage.getItem('user')
     }
   },
+  methods: {
+    logout(){
+      localStorage.removeItem('user')
+      this.isLogged = localStorage.getItem('user')
+      console.log(this.isLogged)
+      this.$router.push("/login")
+    }
+  }
 }
 </script>
 
