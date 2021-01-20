@@ -4,12 +4,32 @@
     <div class="wrapper fadeInDown">
       <div id="formContent">
           <div class="mt-5 text-center">
-            <form>
-              <input type="text" id="login" name="login" placeholder="login">
-              <input type="password" id="password" name="login" placeholder="password">
+            <span v-if="errors.length > 0">
+              <b>Please correct the following error(s):</b>
+              <ul>
+                <li v-for="error in errors" v-bind:key="error">{{ error }}</li>
+              </ul>
+            </span>
+
+
+            <form id="app"
+                  @submit="checkForm"
+                  method="post">
+              <input
+                  type="text"
+                  v-model="username"
+                  id="username"
+                  name="username"
+                  placeholder="login">
+              <input
+                  type="password"
+                  v-model="password"
+                  id="password"
+                  name="password"
+                  placeholder="password">
               <input type="submit" value="Zaloguj się">
               <div id="formFooter">
-                <h>Nie masz konta? </h>
+                <h>Nie masz konta?</h>
                 <router-link class="underlineHover" to="/register">Zarejestruj się tutaj</router-link>
               </div>
             </form>
@@ -21,8 +41,58 @@
 
 <script>
 import TopBar from "../components/TopBar";
+import UserDataService from "@/services/UserDataService";
 export default {
-name: "Login",
+  name: "Login",
+  data: function() {
+    return {
+        errors: [],
+        username: null,
+        password: null
+      };
+  },
+  methods:{
+    checkForm: function (e) {
+      e.preventDefault();
+
+      this.errors = [];
+
+      if (this.username === null) {
+        this.errors.push('Nazwa użytkownika jest wymagana.');
+      }
+      if (this.password === null) {
+        this.errors.push('Hasło jest wymagane.');
+      }
+      else {
+        let data = {
+          "login": this.username,
+          "password": this.password
+        }
+        UserDataService.login(data)
+            .then(user => {
+              // login successful if there's a jwt token in the response
+              //if (user.token) {
+                console.log(user)
+                // store user details and jwt token in local storage to keep user logged in between page refreshes
+                localStorage.setItem('user', JSON.stringify(user));
+                this.$router.push('/')
+              //}
+            })
+            .catch(err => {
+            if(err.response.status === 403){
+              this.errors.push("Nieprawidłowy login lub hasło.")
+            }
+            else if(err.response.status === 500){
+              this.errors.push("Błąd serwera, spróbuj ponownie się zalogować.")
+            }
+            else{
+              this.errors.push("Nieznany błąd.")
+            }
+          });
+        }
+
+      }
+    },
   components: {TopBar}
 }
 </script>

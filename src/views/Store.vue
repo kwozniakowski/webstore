@@ -16,9 +16,9 @@
         <div class="card-body d-flex flex-column">
           <div class="card-text">{{product.description}}</div>
         </div>
-          <div class="mt-auto card-footer form-inline">
-            <div class="col-row-6">{{product.price}} zł</div>
-            <button class="btn btn-dark col-row-6" @click="addToCart(product)">Dodaj do koszyka</button>
+          <div class="mt-auto card-footer">
+            <div class="col-row-6 text-lg-left" style="font-size: 1.5rem">{{product.price}} zł</div>
+            <button class="btn btn-dark col-row-6 float-right" @click="addToCart(product)">Dodaj do koszyka</button>
           </div>
       </div>
     </div>
