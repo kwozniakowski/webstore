@@ -18,7 +18,7 @@
         </div>
           <div class="mt-auto card-footer">
             <div class="col-row-6 text-lg-left" style="font-size: 1.5rem">{{product.price}} zł</div>
-            <button class="btn btn-dark col-row-6 float-right" @click="addToCart(product)">Dodaj do koszyka</button>
+            <button class="btn btn-dark col-row-6 float-right" v-on:click="addToCart(product)">Dodaj do koszyka</button>
           </div>
       </div>
     </div>
@@ -39,18 +39,26 @@ export default {
       productsToShow: [],
       categories: ['Wszystko'],
       chart: [],
+      user: null,
     }
   },
   components: {TopBar},
   methods: {
     addToCart: function (product) {
-      let jsonProductData = {
+      try {
+        this.user = JSON.parse(localStorage.getItem('user'));
+      } catch(e) {
+        localStorage.removeItem('user');
+      }
+
+      let jsonData = {
         "name": product.name,
         "quantity": 1,
         "price": 3,
-        "description": product.description
+        "description": product.description,
+        "UserId": this.user.data.data._id
       }
-      CartDataService.addItemToCart(jsonProductData)
+      CartDataService.addItemToCart(jsonData)
     },
 
     getAllProducts: function() {

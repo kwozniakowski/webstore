@@ -5,8 +5,8 @@ class CartDataService {
         return http.get("/cart");
     }
 
-    addItemToCart(jsonProductData) {
-        return http.post("/cart", jsonProductData)
+    addItemToCart(jsonData) {
+        return http.post("/cart", jsonData)
     }
 }
 
