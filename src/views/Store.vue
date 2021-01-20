@@ -54,9 +54,9 @@ export default {
       let jsonData = {
         "name": product.name,
         "quantity": 1,
-        "price": 3,
+        "price": product.price,
         "description": product.description,
-        "UserId": this.user.data.data._id
+        "UserId": this.user.data.data._id,
       }
       CartDataService.addItemToCart(jsonData)
     },

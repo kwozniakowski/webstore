@@ -13,6 +13,7 @@ import Cart from "./views/Cart"
 import Login from "./views/Login"
 import Register from "./views/Register";
 import Order from "./views/Order";
+import AdminPanel from "./views/AdminPanel";
 
 Vue.use(VueRouter)
 
@@ -50,7 +51,12 @@ export const routes = [
     {
         path: "/order",
         component: Order
+    },
+    {
+        path: "/adminpanel",
+        component: AdminPanel
     }
+
 
 ]
 
