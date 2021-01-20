@@ -12,6 +12,7 @@ import Store from "./views/Store"
 import Cart from "./views/Cart"
 import Login from "./views/Login"
 import Register from "./views/Register";
+import Order from "./views/Order";
 
 Vue.use(VueRouter)
 
@@ -45,6 +46,10 @@ export const routes = [
     {
         path: "*",
         redirect: "/login"
+    },
+    {
+        path: "/order",
+        component: Order
     }
 
 ]
