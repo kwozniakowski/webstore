@@ -52,11 +52,12 @@ export default {
       }
 
       let jsonData = {
+        "itemId": product._id,
         "name": product.name,
         "quantity": 1,
         "price": product.price,
         "description": product.description,
-        "UserId": this.user.data.data._id,
+        "userId": this.user.data.data._id,
       }
       CartDataService.addItemToCart(jsonData)
     },
@@ -97,6 +98,12 @@ export default {
   },
 
   mounted() {
+    try {
+      this.user = JSON.parse(localStorage.getItem('user'));
+    } catch(e) {
+      localStorage.removeItem('user');
+    }
+    //CartDataService.createCart({"userId": this.user.data.data._id});
     this.getAllProducts();
 
   }

@@ -25,8 +25,8 @@
 </template>
 
 <script>
-import {bus} from '../main';
 
+import CartDataService from "../services/CartDataService";
 
 export default {
 name: "Cart",
@@ -37,19 +37,20 @@ name: "Cart",
       }
     },
   created() {
-    bus.$on("cartStateChanged", products => {
-      this.products = []
-      for(let i=0; i< products.length; i++)
-      {
-        if(products[i].isInChart)
-        {
-          console.log("dodano")
-          this.products.push(products[i])
-        }
-      }
-    } )
+    this.getCart();
   },
   methods: {
+    getCart: function() {
+      CartDataService.getCart()
+          .then(response => {
+            this.products = response.data.data;
+            //console.log(response.data);
+          })
+          .catch(e => {
+            console.log(e);
+          });
+
+    },
   makeOrder: function () {
     //przejscie do zamowienia
   }
