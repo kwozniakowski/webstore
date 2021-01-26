@@ -1,60 +1,81 @@
 <template>
-  <div>
+  <div v-if="products.length > 0">
     <TopBar>
     </TopBar>
     <table class="table card-columns wrapper shadow">
+
       <thead>
       <tr>
         <th scope="col">Nazwa produktu</th>
-        <th scope="col">łączna cena</th>
-        <th scope="col">ilość</th>
+        <th scope="col">Łączna cena</th>
+        <th scope="col">Cena za sztukę</th>
+        <th scope="col">g/szt.</th>
+        <th scope="col">Masa całkowita</th>
+        <th scope="col">Ilość</th>
       </tr>
       </thead>
       <tbody v-for='product in products' v-bind:key="'product'+product._id">
       <tr>
         <td >{{product.name}}</td>
+        <td >{{product.total}} zł</td>
         <td >{{product.price}} zł</td>
-        <td >
-          <input type="number" value="1">
-        </td>
+        <td >{{product.weight}}</td>
+        <td >{{Math.round(product.weight*product.quantity*100)/100}} g</td>
+        <td >{{product.quantity}}</td>
       </tr>
       </tbody>
-      <input type="submit" class="btn submitButton" @click="makeOrder()">
+      <input type="submit" class="btn submitButton mt-3" @click="makeOrder()">
     </table>
+  </div>
+  <div v-else class="text-center">
+    <TopBar></TopBar>
+
+    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+      <main role="main" class="mt-5 inner cover">
+        <h1 class="cover-heading">Wygląda na to, że Twój koszyk jest pusty.</h1>
+        <p class="lead">Zachęcamy do przejścia do sekcji <router-link to="/store">"Nasze produkty"</router-link>, aby zobaczyć co mamy w ofercie oraz wybrać coś dla siebie.</p>
+      </main>
+    </div>
   </div>
 </template>
 
 <script>
 
 import CartDataService from "../services/CartDataService";
+import TopBar from "@/components/TopBar";
 
 export default {
 name: "Cart",
-    data() {
-      return {
-        products: [
-        ]
-      }
-    },
+  data() {
+    return {
+      products: [
+      ],
+      cart: null
+    }
+  },
   created() {
     this.getCart();
   },
   methods: {
     getCart: function() {
-      CartDataService.getCart()
+      let userId = JSON.parse(localStorage.getItem('user'))["data"]["data"]["_id"]
+      let data = {"userId": userId}
+      CartDataService.getCart(data)
           .then(response => {
-            this.products = response.data.data;
-            //console.log(response.data);
+            this.cart = response.data.data
+            this.products = this.cart.items
+            console.log(this.cart)
           })
           .catch(e => {
             console.log(e);
           });
 
     },
-  makeOrder: function () {
-    //przejscie do zamowienia
-  }
-  }
+    makeOrder: function () {
+      //przejscie do zamowienia
+    }
+  },
+  components: {TopBar},
 }
 </script>
 

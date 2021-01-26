@@ -33,7 +33,6 @@ export default {
     logout(){
       localStorage.removeItem('user')
       this.isLogged = localStorage.getItem('user')
-      console.log(this.isLogged)
       this.$router.push("/login")
     }
   }

@@ -1,12 +1,13 @@
 import http from "../http-common";
 
 class CartDataService {
-    getCart() {
-        return http.get("/cart");
+    getCart(userId) {
+        console.log(userId)
+        return http.post("/cart", userId);
     }
 
     addItemToCart(jsonData) {
-        return http.post("/cart", jsonData)
+        return http.post("/cart/add", jsonData)
     }
     createCart(jsonData) {
         return http.post("/cart/create", jsonData)
