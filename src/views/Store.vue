@@ -53,6 +53,7 @@ import TopBar from "../components/TopBar";
 import ProductsDataService from "../services/ProductsDataService.js"
 import CartDataService from "@/services/CartDataService";
 import AddedProductModal from "@/components/AddedProductModal";
+import CategoriesDataService from "../services/CategoriesDataService";
 import {bus} from "@/main"
 
 export default {
@@ -94,14 +95,8 @@ export default {
           .then(response => {
             this.products = response.data.data;
             this.productsToShow = this.products;
-            for(let i = 0; i < this.products.length ; i ++)
-            {
-              if(!this.categories.includes(this.products[i].category))
-              {
-                this.categories.push(this.products[i].category)
-              }
-            }
-            //console.log(response.data);
+            this.getAllCategories()
+            console.log(response.data.data);
           })
           .catch(e => {
             console.log(e);
@@ -122,6 +117,15 @@ export default {
         }
       }
     },
+    getAllCategories: function () {
+      CategoriesDataService.getAll().then(response => {
+            for (let i=0; i < response.data.data.length; i++) {
+              console.log(response)
+              this.categories.push( response.data.data[i].name);
+            }
+          }
+      )
+    }
   },
 
   mounted() {

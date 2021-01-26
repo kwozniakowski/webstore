@@ -12,6 +12,9 @@ class CartDataService {
     createCart(jsonData) {
         return http.post("/cart/create", jsonData)
     }
+    updateCart(jsonData) {
+        return http.put("/cart/update", jsonData)
+    }
 }
 
 export default new CartDataService();

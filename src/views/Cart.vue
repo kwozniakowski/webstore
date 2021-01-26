@@ -21,7 +21,10 @@
         <td >{{product.price}} zł</td>
         <td >{{product.weight}}</td>
         <td >{{Math.round(product.weight*product.quantity*100)/100}} g</td>
-        <td >{{product.quantity}}</td>
+        <td >
+          <input type="number" v-model="product.quantity"
+                 @change="changeQuantity(product)"/>
+        </td>
       </tr>
       </tbody>
       <input type="submit" class="btn submitButton mt-3" @click="makeOrder()">
@@ -71,7 +74,18 @@ name: "Cart",
           });
 
     },
+
+    changeQuantity: function (product) {
+      let data = {
+        "quantity": product.quantity
+
+      }
+      console.log(product)
+      CartDataService.updateCart(data)
+    },
+
     makeOrder: function () {
+      console.log(this.products)
       //przejscie do zamowienia
     }
   },

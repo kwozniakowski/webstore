@@ -18,14 +18,14 @@
               <div class="form-group row">
                 <label for="inputPrice" class="col-sm-4 col-form-label">Cena</label>
                 <div class="col-sm-8">
-                  <input v-model="product.price" type="number"
+                  <input v-model="product.price" type="text"
                          class="form-control" id="inputPrice" placeholder=product.price>
                 </div>
               </div>
               <div class="form-group row">
                 <label for="inputWeight" class="col-sm-4 col-form-label">Waga</label>
                 <div class="col-sm-8">
-                  <input v-model="product.weight" type="number"
+                  <input v-model="product.weight" type="text"
                          class="form-control" id="inputWeight" placeholder=product.weight>
                 </div>
               </div>
@@ -104,6 +104,7 @@
 <script>
 import ProductsDataService from "../services/ProductsDataService";
 import TopBar from "../components/TopBar";
+import CategoriesDataService from "../services/CategoriesDataService";
 export default {
   name: "AdminPanel",
   components: {
@@ -133,13 +134,7 @@ export default {
           .then(response => {
             this.products = response.data.data;
             this.productsToShow = this.products;
-            for(var i = 0; i < this.products.length ; i ++)
-            {
-              if(!this.categories.includes(this.products[i].category))
-              {
-                this.categories.push(this.products[i].category)
-              }
-            }
+            this.getAllCategories()
             //console.log(response.data);
           })
           .catch(e => {
@@ -162,11 +157,21 @@ export default {
       }
     },
 
+    getAllCategories: function () {
+      CategoriesDataService.getAll().then(response => {
+            for (let i=0; i < response.data.data.length; i++) {
+              this.categories.push( response.data.data[i].name);
+            }
+          }
+      )
+    },
+
     deleteProduct: function (product) {
       let jsonData = {
-        "id": product.id
+        "id": product._id
       }
-      ProductsDataService.deleteProduct(jsonData);
+      console.log(jsonData);
+      ProductsDataService.deleteProduct(jsonData)
     },
 
     updateProduct: function (product) {
