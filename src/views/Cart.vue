@@ -17,7 +17,7 @@
       <tbody v-for='product in products' v-bind:key="'product'+product._id">
       <tr>
         <td >{{product.name}}</td>
-        <td >{{product.total}} zł</td>
+        <td >{{product.price*product.quantity}} zł</td>
         <td >{{product.price}} zł</td>
         <td >{{product.weight}}</td>
         <td >{{Math.round(product.weight*product.quantity*100)/100}} g</td>
@@ -27,7 +27,12 @@
         </td>
       </tr>
       </tbody>
+      <tr class="table card-columns wrapper shadow">
+      Total: {{this.total}}
+      </tr>
+      <router-link to="/order">
       <input type="submit" class="btn submitButton mt-3" @click="makeOrder()">
+      </router-link>
     </table>
   </div>
   <div v-else class="text-center">
@@ -53,7 +58,8 @@ name: "Cart",
     return {
       products: [
       ],
-      cart: null
+      cart: null,
+      total: 0
     }
   },
   created() {
@@ -61,12 +67,14 @@ name: "Cart",
   },
   methods: {
     getCart: function() {
+
       let userId = JSON.parse(localStorage.getItem('user'))["data"]["data"]["_id"]
       let data = {"userId": userId}
       CartDataService.getCart(data)
           .then(response => {
             this.cart = response.data.data
             this.products = this.cart.items
+            this.setTotal()
             console.log(this.cart)
           })
           .catch(e => {
@@ -76,17 +84,23 @@ name: "Cart",
     },
 
     changeQuantity: function (product) {
+      this.setTotal()
       let data = {
         "quantity": product.quantity
-
       }
       console.log(product)
       CartDataService.updateCart(data)
     },
 
     makeOrder: function () {
-      console.log(this.products)
-      //przejscie do zamowienia
+
+    },
+    setTotal: function () {
+      this.total = 0
+      for(let product in this.products)
+      {
+        this.total = this.total + (parseFloat(product.price) * parseFloat(product.quantity) )
+      }
     }
   },
   components: {TopBar},

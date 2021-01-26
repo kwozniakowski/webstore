@@ -56,8 +56,6 @@ export const routes = [
         path: "/adminpanel",
         component: AdminPanel
     }
-
-
 ]
 
 const router = new VueRouter(

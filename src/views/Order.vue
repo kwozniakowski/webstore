@@ -80,7 +80,7 @@
 
 <script>
 import TopBar from "../components/TopBar";
-import ProductsDataService from "../services/ProductsDataService";
+import CartDataService from "../services/CartDataService";
 export default {
   name: "Order",
   components: {TopBar},
@@ -90,18 +90,23 @@ export default {
     }
   },
   methods: {
-    getAllProducts: function() {
-      ProductsDataService.getAll()
+    getCart: function() {
+      let userId = JSON.parse(localStorage.getItem('user'))["data"]["data"]["_id"]
+      let data = {"userId": userId}
+      CartDataService.getCart(data)
           .then(response => {
-            this.products = response.data.data;
+            this.cart = response.data.data
+            this.products = this.cart.items
+            console.log(this.cart)
           })
           .catch(e => {
             console.log(e);
           });
-    }
+
+    },
   },
   mounted() {
-    this.getAllProducts();
+    this.getCart();
 
   }
 }
