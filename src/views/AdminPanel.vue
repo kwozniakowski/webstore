@@ -10,30 +10,29 @@
       <option v-for="category in categories" v-bind:key="category">{{category}}</option>
     </select>
     <div class="row col">
-      <div class="col-4" v-for='product in productsToShow' v-bind:key="'product'+product._id">
+      <div class="col-4" v-for='(product) in productsToShow' v-bind:key="'product'+product._id">
         <div class="card mt-5">
           <i class="card-header">{{product.name}}</i>
           <div class="card-body d-flex flex-column">
             <form>
               <div class="form-group row">
-                <label for="inputPrice" class="col-sm-4 col-form-label">Cena</label>
+                <label class="col-sm-4 col-form-label">Cena</label>
                 <div class="col-sm-8">
                   <input v-model="product.price" type="text"
-                         class="form-control" id="inputPrice" placeholder=product.price>
+                         class="form-control" placeholder=product.price>
                 </div>
               </div>
               <div class="form-group row">
-                <label for="inputWeight" class="col-sm-4 col-form-label">Waga</label>
+                <label class="col-sm-4 col-form-label">Waga</label>
                 <div class="col-sm-8">
                   <input v-model="product.weight" type="text"
-                         class="form-control" id="inputWeight" placeholder=product.weight>
+                         class="form-control" placeholder=product.weight>
                 </div>
               </div>
               <div class="form-group row">
-                <label for="setCategoryInput" class="col-sm-4 col-form-label">Kategoria</label>
+                <label class="col-sm-4 col-form-label">Kategoria</label>
                 <select class="form-control col-sm-8"
                         name="CategoryInput"
-                        id="setCategoryInput"
                         v-model.trim="product.category"
                         v-model="product.category">
                   <option v-for="category in categories" v-bind:key="category">{{category}}</option>
@@ -167,16 +166,14 @@ export default {
     },
 
     deleteProduct: function (product) {
-      let jsonData = {
-        "id": product._id
-      }
-      console.log(jsonData);
-      ProductsDataService.deleteProduct(jsonData)
+      let id = product._id
+      ProductsDataService.deleteProduct(id)
     },
 
     updateProduct: function (product) {
       let jsonData = {
-        "id": product.id,
+        "id": product._id,
+        "name": product.name,
         "price": product.price,
         "weight": product.weight,
         "category": product.category,

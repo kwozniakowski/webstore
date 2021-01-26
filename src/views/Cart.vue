@@ -46,6 +46,7 @@
 
 import CartDataService from "../services/CartDataService";
 import TopBar from "@/components/TopBar";
+import OrdersDataService from "@/services/OrdersDataService";
 
 export default {
 name: "Cart",
@@ -53,7 +54,7 @@ name: "Cart",
     return {
       products: [
       ],
-      cart: null
+      cart: null,
     }
   },
   created() {
@@ -86,7 +87,16 @@ name: "Cart",
 
     makeOrder: function () {
       console.log(this.products)
-      //przejscie do zamowienia
+      let payload = {
+        acceptDate: new Date().toString(),
+        cart: this.cart,
+        purchaserData: {
+          email: "test",
+          username: localStorage.setItem('user')["data"]["data"]["username"],
+          phoneNumber: "510422262"
+        }
+      }
+      OrdersDataService.create(payload)
     }
   },
   components: {TopBar},

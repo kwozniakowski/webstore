@@ -10,11 +10,11 @@ class ProductsDataService {
     }
 
     updateProduct(jsonData) {
-        return http.put("/products", jsonData)
+        return http.put("/products/"+jsonData["id"], jsonData)
     }
 
-    deleteProduct(jsonData) {
-        return http.delete("/products", jsonData)
+    deleteProduct(id) {
+        return http.delete("/products/"+id.toString())
     }
 
     createProduct(jsonData) {
