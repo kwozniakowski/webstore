@@ -17,19 +17,21 @@
       <tbody v-for='item in items' v-bind:key="'item'+item._id">
       <tr>
         <td >{{item.name}}</td>
-        <td >{{item.total}} zł</td>
+        <td >{{Math.round(item.total*item.quantity*100)/100}} zł</td>
         <td >{{item.price}} zł</td>
         <td >{{item.weight}}</td>
         <td >{{Math.round(item.weight*item.quantity*100)/100}} g</td>
         <td >
-          <input type="number" v-model="item.quantity"
+          <input type="number" v-model="item.quantity" :bind="setSubTotal()"
                  @change="changeQuantity(item)"/>
         </td>
         <td >
           <input type="button" value="x" @click="removeFromCart(item)"/>
         </td>
+
       </tr>
       </tbody>
+      <div>Total: {{cart.subTotal}}</div>
       <router-link to="/order">
         <input type="submit" class="btn submitButton mt-3" @click="makeOrder()">
       </router-link>
@@ -122,6 +124,17 @@ name: "Cart",
       }
 
 
+    },
+    setSubTotal: function () {
+      let sum = 0;
+      for(let i=0; i < this.items.length ; i++)
+      {
+        let item = this.items[i]
+        sum =  sum + parseFloat(item.quantity) * parseFloat(item.price)
+      }
+      console.log(sum)
+      this.cart.subTotal = Math.round(sum*100)/100
+      //Tutaj trzeba dać update do subtotal koszyka XD
     }
 
   },
