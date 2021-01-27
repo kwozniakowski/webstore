@@ -34,7 +34,7 @@ export default {
       localStorage.removeItem('user')
       this.isLogged = localStorage.getItem('user')
       this.$router.push("/login")
-    }
+    },
   }
 }
 </script>

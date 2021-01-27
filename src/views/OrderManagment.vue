@@ -1,7 +1,7 @@
 <template>
   <div>
-    <TopBar>
-    </TopBar>
+    <AdminTopBar>
+    </AdminTopBar>
     <div class="mt-5 container table-responsive">
       <table class="table">
         <thead>
@@ -21,9 +21,19 @@
             <td>{{Math.round(order.total*100)/100}} zł</td>
             <td>{{order.createdAt|dateFormat}}</td>
             <td v-if="order.state.state === 'NIEZATWIERDZONE' ">Brak</td>
-            <td v-else-if="order.state.state ==='ANULOWANE'">Anulowane</td>
+            <td v-else-if="order.state.state ==='ANULOWANE'" style="color: darkred">Anulowane</td>
+            <td v-else-if="order.state.state ==='ZREALIZOWANE'" style="color: darkgreen">
+              Zrealizowane {{ order.acceptDate|dateFormat }}</td>
             <td v-else>{{ order.acceptDate|dateFormat }}</td>
-            <td></td>
+            <td v-if="order.state.state !=='ANULOWANE' && order.state.state !=='ZREALIZOWANE'">
+              <input type="submit" value="Anuluj" @click="cancelOrder(order)">
+            </td>
+            <td v-if="order.state.state === 'NIEZATWIERDZONE'">
+              <input type="submit" value="Zatwierdź" @click="confirmOrder(order)">
+            </td>
+            <td v-if="order.state.state === 'ZATWIERDZONE'">
+              <input type="submit" value="Zrealizuj" @click="realizeOrder(order)">
+            </td>
           </tr>
           <tr v-bind:key="order._id+'2'">
             <td class="border-0 p-0" colspan="3">
@@ -76,7 +86,8 @@
 
 <script>
 import OrdersDataService from "@/services/OrdersDataService";
-import TopBar from "@/components/TopBar";
+import AdminTopBar from "../components/AdminTopBar";
+import ProductsDataService from "../services/ProductsDataService";
 import moment from "moment"
 
 export default {
@@ -86,7 +97,7 @@ export default {
       orders: []
     }
   },
-  components: {TopBar},
+  components: {AdminTopBar},
   methods: {
     getAllOrders: function() {
       OrdersDataService.getAll()
@@ -97,7 +108,62 @@ export default {
           .catch(e => {
             console.log(e);
           });
+    },
+    confirmOrder: function (order) {
+      let data = {
+        state: 'ZATWIERDZONE',
+        id: order._id,
+        acceptDate: new Date()
+      }
+      console.log("Id zamowienia: " + order._id)
+      try{
+        OrdersDataService.update(data)
+        window.location.reload()
+      }
+      catch (e) {
+        console.log(e)
+      }
+
+    },
+
+    cancelOrder: function(order) {
+      let data = {
+        state: 'ANULOWANE',
+        id: order._id,
+        acceptDate: new Date()
+      }
+      console.log("Id zamowienia: " + order._id)
+      try{
+        OrdersDataService.update(data)
+        window.location.reload()
+      }
+      catch (e) {
+        console.log(e)
+      }
+    },
+
+    realizeOrder: function (order) {
+      let data = {
+        state: 'ZREALIZOWANE',
+        id: order._id,
+        acceptDate: new Date()
+      }
+      console.log("Id zamowienia: " + order._id)
+      try{
+        OrdersDataService.update(data)
+        for(let i = 0 ; i < order.items.length ; i ++)
+        {
+          let product = order.items[i]
+          ProductsDataService.updateProduct(product)
+        }
+
+        window.location.reload()
+      }
+      catch (e) {
+        console.log(e)
+      }
     }
+
   },
   filters: {
     dateFormat: function (value){

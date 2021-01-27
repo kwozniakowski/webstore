@@ -21,9 +21,13 @@
         <td >{{item.price}} zł</td>
         <td >{{item.weight}}</td>
         <td >{{Math.round(item.weight*item.quantity*100)/100}} g</td>
-        <td >
+        <td v-if="item.quantity>=1">
           <input type="number" v-model="item.quantity" :bind="setSubTotal()"
                  @change="changeQuantity(item)"/>
+        </td>
+        <td v-else-if="item.quantity<1">
+          <input type="number" v-model="item.quantity" :bind="setSubTotal()"
+                 @change="changeQuantityToOne(item)"/>
         </td>
         <td >
           <input type="button" value="x" @click="removeFromCart(item)"/>
@@ -76,7 +80,6 @@ name: "Cart",
           .then(response => {
             this.cart = response.data.data
             this.items = this.cart.items
-            console.log(this.cart)
           })
           .catch(e => {
             console.log(e);
@@ -93,11 +96,23 @@ name: "Cart",
       }
       CartDataService.updateCart(jsonData)
     },
+    changeQuantityToOne: function (item) {
+      item.quantity = 1
+      let userId = JSON.parse(localStorage.getItem('user'))["data"]["data"]["_id"]
+      let jsonData = {
+        "itemId": item._id,
+        "quantity": 1,
+        "userId": userId
+      }
+      CartDataService.updateCart(jsonData)
+    },
 
     makeOrder: function () {
       console.log(this.items)
+      let userId = JSON.parse(localStorage.getItem('user'))["data"]["data"]["_id"]
       let payload = {
         acceptDate: new Date().toString(),
+        userId: userId,
         cart: this.cart,
         purchaserData: {
           email: "test",
@@ -105,6 +120,7 @@ name: "Cart",
           phoneNumber: "510422262"
         }
       }
+      CartDataService.emptyCart(payload)
       OrdersDataService.create(payload)
     },
 

@@ -10,13 +10,16 @@
         <th scope="col">ilość</th>
       </tr>
       </thead>
-      <tbody v-for='product in products' v-bind:key="'product'+product._id">
+      <tbody v-for='product in items' v-bind:key="'product'+product._id">
       <tr>
         <td >{{product.name}}</td>
-        <td >{{product.price}} zł</td>
+        <td >{{product.price * product.quantity}} zł</td>
         <td >{{product.quantity}}</td>
       </tr>
       </tbody>
+      <tr>
+        <td style="color: forestgreen; font-weight: bold">Total: {{this.total}}</td>
+      </tr>
     </table>
     <form class="needs-validation wrapper card shadow" novalidate>
         <div class="col">
@@ -72,7 +75,7 @@
             Please provide a valid zip.
           </div>
         </div>
-      <button class="btn btn-dark" style="margin: 10px" type="submit">Zatwierdź zamówienie</button>
+      <button class="btn btn-dark" style="margin: 10px" type="submit" @click="confirmOrder()">Zatwierdź zamówienie</button>
       </div>
     </form>
   </div>
@@ -80,28 +83,56 @@
 
 <script>
 import TopBar from "../components/TopBar";
-import ProductsDataService from "../services/ProductsDataService";
+import OrdersDataService from "../services/OrdersDataService";
 export default {
   name: "Order",
   components: {TopBar},
   data() {
     return {
-      products: []
+      items: [],
+      total: 0,
+      order: null
     }
   },
   methods: {
-    getAllProducts: function() {
-      ProductsDataService.getAll()
+    getAllItems: function() {
+      let userId = JSON.parse(localStorage.getItem('user'))["data"]["data"]["_id"]
+      let data = {"userId": userId}
+      OrdersDataService.getRecentOrder(data)
           .then(response => {
-            this.products = response.data.data;
+            let items = response.data.data;
+            this.order =  items[items.length-1]
+            this.setTotal(items[items.length - 1].total)
+            this.items = items[items.length - 1].items
+            console.log(this.items)
           })
           .catch(e => {
             console.log(e);
           });
+    },
+
+    editOrder: function () {
+      let data = {
+        state: 'ZATWIERDZONE',
+        id: this.order._id
+      }
+      console.log("Id zamowienia: " + this.order._id)
+      try{
+        OrdersDataService.update(data)
+        this.$router.push('/')
+      }
+      catch (e) {
+        console.log(e)
+      }
+
+    },
+
+    setTotal: function (total) {
+      this.total = total
     }
   },
   mounted() {
-    this.getAllProducts();
+    this.getAllItems();
 
   }
 }

@@ -10,8 +10,6 @@
                 <li v-for="error in errors" v-bind:key="error">{{ error }}</li>
               </ul>
             </span>
-
-
             <form id="app"
                   @submit="checkForm"
                   method="post">

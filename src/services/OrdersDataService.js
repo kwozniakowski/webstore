@@ -14,11 +14,15 @@ class OrdersDataService {
     }
 
     update(jsonData) {
-        return http.put("/orders/"+jsonData["id"], jsonData)
+        return http.put("/orders", jsonData)
     }
 
     delete(id) {
         return http.delete("/products/"+id.toString())
+    }
+
+    getRecentOrder(jsonData) {
+        return http.get("/orders/by-user", jsonData)
     }
 }
 

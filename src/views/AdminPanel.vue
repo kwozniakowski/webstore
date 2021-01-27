@@ -1,7 +1,7 @@
 <template>
   <div>
-    <TopBar>
-    </TopBar>
+    <AdminTopBar>
+    </AdminTopBar>
     <select class="form-control mx-3 mt-3"
             name="CategoryInput"
             id="categoryInput"
@@ -102,12 +102,12 @@
 
 <script>
 import ProductsDataService from "../services/ProductsDataService";
-import TopBar from "../components/TopBar";
+import AdminTopBar from "../components/AdminTopBar";
 import CategoriesDataService from "../services/CategoriesDataService";
 export default {
   name: "AdminPanel",
   components: {
-    TopBar
+    AdminTopBar
   },
   data () {
     return {

@@ -16,6 +16,10 @@ class CartDataService {
     removeFromCart(jsonData) {
         return http.put("/cart/delete", jsonData)
     }
+
+    emptyCart(jsonData) {
+        return http.put("/cart/empty-cart",jsonData)
+    }
 }
 
 export default new CartDataService();
