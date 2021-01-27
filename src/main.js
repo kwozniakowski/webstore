@@ -58,7 +58,7 @@ export const routes = [
         component: AdminPanel
     },
     {
-        path: "/ordermanagment",
+        path: "/ordermanagement",
         component: OrderManagment
     }
 
