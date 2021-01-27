@@ -111,13 +111,20 @@ name: "Cart",
     },
 
     removeFromCart: function (product) {
-      let userId = JSON.parse(localStorage.getItem('user'))["data"]["data"]["_id"]
-      let jsonData = {
-        "itemId": product._id,
-        "quantity": product.quantity,
-        "userId": userId
+      try {
+        let userId = JSON.parse(localStorage.getItem('user'))["data"]["data"]["_id"]
+        let jsonData = {
+          "itemId": product._id,
+          "quantity": product.quantity,
+          "userId": userId
+        }
+        CartDataService.removeFromCart(jsonData)
       }
-      CartDataService.removeFromCart(jsonData)
+      catch (e) {
+        console.log(e)
+      }
+
+
     }
 
   },
