@@ -1,5 +1,5 @@
 <template>
-  <div v-if="products.length > 0">
+  <div v-if="items.length > 0">
     <TopBar>
     </TopBar>
     <table class="table card-columns wrapper shadow">
@@ -14,19 +14,19 @@
         <th scope="col">Ilość</th>
       </tr>
       </thead>
-      <tbody v-for='product in products' v-bind:key="'product'+product._id">
+      <tbody v-for='item in items' v-bind:key="'item'+item._id">
       <tr>
-        <td >{{product.name}}</td>
-        <td >{{product.total}} zł</td>
-        <td >{{product.price}} zł</td>
-        <td >{{product.weight}}</td>
-        <td >{{Math.round(product.weight*product.quantity*100)/100}} g</td>
+        <td >{{item.name}}</td>
+        <td >{{item.total}} zł</td>
+        <td >{{item.price}} zł</td>
+        <td >{{item.weight}}</td>
+        <td >{{Math.round(item.weight*item.quantity*100)/100}} g</td>
         <td >
-          <input type="number" v-model="product.quantity"
-                 @change="changeQuantity(product)"/>
+          <input type="number" v-model="item.quantity"
+                 @change="changeQuantity(item)"/>
         </td>
         <td >
-          <input type="button" value="x" @click="removeFromCart(product)"/>
+          <input type="button" value="x" @click="removeFromCart(item)"/>
         </td>
       </tr>
       </tbody>
@@ -58,7 +58,7 @@ export default {
 name: "Cart",
   data() {
     return {
-      products: [
+      items: [
       ],
       cart: null,
     }
@@ -73,7 +73,7 @@ name: "Cart",
       CartDataService.getCart(data)
           .then(response => {
             this.cart = response.data.data
-            this.products = this.cart.items
+            this.items = this.cart.items
             console.log(this.cart)
           })
           .catch(e => {
@@ -82,22 +82,18 @@ name: "Cart",
 
     },
 
-    changeQuantity: function (product) {
+    changeQuantity: function (item) {
       let userId = JSON.parse(localStorage.getItem('user'))["data"]["data"]["_id"]
       let jsonData = {
-        "itemId": product._id,
-        "name": product.name,
-        "quantity": product.quantity,
-        "price": product.price,
-        "description": product.description,
+        "itemId": item._id,
+        "quantity": item.quantity,
         "userId": userId
       }
-      console.log(product)
       CartDataService.updateCart(jsonData)
     },
 
     makeOrder: function () {
-      console.log(this.products)
+      console.log(this.items)
       let payload = {
         acceptDate: new Date().toString(),
         cart: this.cart,
@@ -110,15 +106,22 @@ name: "Cart",
       OrdersDataService.create(payload)
     },
 
-    removeFromCart: function (product) {
-      let userId = JSON.parse(localStorage.getItem('user'))["data"]["data"]["_id"]
-      console.log(product)
-      let jsonData = {
-        "itemId": product._id,
-        "quantity": product.quantity,
-        "userId": userId
+    removeFromCart: function (item) {
+      try {
+        let userId = JSON.parse(localStorage.getItem('user'))["data"]["data"]["_id"]
+        let jsonData = {
+          "itemId": item._id,
+          "quantity": item.quantity,
+          "userId": userId
+        }
+        CartDataService.removeFromCart(jsonData)
+        window.location.reload()
       }
-      CartDataService.removeFromCart(jsonData)
+      catch (e) {
+        console.log(e)
+      }
+
+
     }
 
   },
