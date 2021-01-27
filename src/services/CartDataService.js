@@ -9,11 +9,12 @@ class CartDataService {
     addItemToCart(jsonData) {
         return http.post("/cart/add", jsonData)
     }
-    createCart(jsonData) {
-        return http.post("/cart/create", jsonData)
-    }
     updateCart(jsonData) {
         return http.put("/cart/update", jsonData)
+    }
+
+    removeFromCart(jsonData) {
+        return http.put("/cart/delete", jsonData)
     }
 }
 

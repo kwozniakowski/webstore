@@ -25,9 +25,15 @@
           <input type="number" v-model="product.quantity"
                  @change="changeQuantity(product)"/>
         </td>
+        <td >
+          <input type="button" value="x" @click="removeFromCart(product)"/>
+        </td>
       </tr>
       </tbody>
-      <input type="submit" class="btn submitButton mt-3" @click="makeOrder()">
+      <router-link to="/order">
+        <input type="submit" class="btn submitButton mt-3" @click="makeOrder()">
+      </router-link>
+
     </table>
   </div>
   <div v-else class="text-center">
@@ -77,12 +83,17 @@ name: "Cart",
     },
 
     changeQuantity: function (product) {
-      let data = {
-        "quantity": product.quantity
-
+      let userId = JSON.parse(localStorage.getItem('user'))["data"]["data"]["_id"]
+      let jsonData = {
+        "itemId": product._id,
+        "name": product.name,
+        "quantity": product.quantity,
+        "price": product.price,
+        "description": product.description,
+        "userId": userId
       }
       console.log(product)
-      CartDataService.updateCart(data)
+      CartDataService.updateCart(jsonData)
     },
 
     makeOrder: function () {
@@ -92,12 +103,23 @@ name: "Cart",
         cart: this.cart,
         purchaserData: {
           email: "test",
-          username: localStorage.setItem('user')["data"]["data"]["username"],
+          username: JSON.parse(localStorage.getItem('user'))["data"]["data"]["username"],
           phoneNumber: "510422262"
         }
       }
       OrdersDataService.create(payload)
+    },
+
+    removeFromCart: function (product) {
+      let userId = JSON.parse(localStorage.getItem('user'))["data"]["data"]["_id"]
+      let jsonData = {
+        "itemId": product._id,
+        "quantity": product.quantity,
+        "userId": userId
+      }
+      CartDataService.removeFromCart(jsonData)
     }
+
   },
   components: {TopBar},
 }
