@@ -14,6 +14,7 @@ import Login from "./views/Login"
 import Register from "./views/Register";
 import Order from "./views/Order";
 import AdminPanel from "./views/AdminPanel";
+import OrderManagment from "@/views/OrderManagment";
 
 Vue.use(VueRouter)
 
@@ -55,6 +56,10 @@ export const routes = [
     {
         path: "/adminpanel",
         component: AdminPanel
+    },
+    {
+        path: "/ordermanagment",
+        component: OrderManagment
     }
 
 

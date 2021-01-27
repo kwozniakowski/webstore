@@ -112,6 +112,7 @@ name: "Cart",
 
     removeFromCart: function (product) {
       let userId = JSON.parse(localStorage.getItem('user'))["data"]["data"]["_id"]
+      console.log(product)
       let jsonData = {
         "itemId": product._id,
         "quantity": product.quantity,
